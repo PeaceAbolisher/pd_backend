@@ -1,1 +1,5 @@
 services:
+  webapp:  # Name of the service
+    image: nginx:latest  # Docker image to use
+    ports:
+      - "8080:80"  # Port mapping: HostPort:ContainerPort
