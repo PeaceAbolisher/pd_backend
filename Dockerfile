@@ -1,11 +1,14 @@
-# Pull image with Java 17
+# Pull image Java 17
 FROM eclipse-temurin:17
+
+# Install Maven
+RUN apt-get update && apt-get install -y maven
 
 # Set the working directory inside the container
 WORKDIR /app
 
 # Copy the packaged JAR file into the container
-COPY target/backend-0.0.1.jar /app/backend.jar
+COPY . .
+RUN mvn clean install
 
-# Specify the command to run your Spring Boot application when the container starts
-CMD ["java", "-jar", "backend.jar"]
+CMD mvn spring-boot:run
