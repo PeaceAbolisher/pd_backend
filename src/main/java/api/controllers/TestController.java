@@ -15,4 +15,11 @@ public class TestController {
         String hello = "Hello World from backend!";
         return ResponseEntity.ok(hello);
     }
+
+    // apenas para teste
+    @GetMapping("")
+    public ResponseEntity<String> home() {
+        String home = "home page i guess?";
+        return ResponseEntity.ok(home);
+    }
 }
