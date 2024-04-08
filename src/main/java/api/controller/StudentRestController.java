@@ -1,6 +1,6 @@
 package api.controller;
 
-import api.model.StudentEntity;
+import api.entity.Student;
 import api.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +22,13 @@ public class StudentRestController {
 
 
     @GetMapping
-    public List<StudentEntity> getAllStudents() {
+    public List<Student> getAllStudents() {
         return studentService.getAllStudents();
     }
 
     @GetMapping("/{studentId}")
-    public ResponseEntity<StudentEntity> getStudentById(@PathVariable Long studentId) {
-        StudentEntity student = studentService.getStudentById(studentId);
+    public ResponseEntity<Student> getStudentById(@PathVariable Long studentId) {
+        Student student = studentService.getStudentById(studentId);
 
         if (student != null) {
             return ResponseEntity.ok(student);

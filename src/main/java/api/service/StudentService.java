@@ -1,6 +1,6 @@
 package api.service;
 
-import api.model.StudentEntity;
+import api.entity.Student;
 import api.repository.StudentEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,17 +16,17 @@ public class StudentService {
     public StudentService(StudentEntityRepository studentEntityRepository) {
         this.studentEntityRepository = studentEntityRepository;
 
-        StudentEntity s = new StudentEntity();
+        Student s = new Student();
         s.setName("teste student");
         studentEntityRepository.save(s);
     }
 
-    public List<StudentEntity> getAllStudents() {
+    public List<Student> getAllStudents() {
         return studentEntityRepository.findAll();
     }
 
-    public StudentEntity getStudentById(Long studentId) {
-        Optional<StudentEntity> studentOptional = studentEntityRepository.findById(studentId);
+    public Student getStudentById(Long studentId) {
+        Optional<Student> studentOptional = studentEntityRepository.findById(studentId);
 
         // return student or null
         return studentOptional.orElse(null);
