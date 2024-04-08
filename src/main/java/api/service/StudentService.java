@@ -15,6 +15,10 @@ public class StudentService {
     @Autowired
     public StudentService(StudentEntityRepository studentEntityRepository) {
         this.studentEntityRepository = studentEntityRepository;
+
+        StudentEntity s = new StudentEntity();
+        s.setName("teste student");
+        studentEntityRepository.save(s);
     }
 
     public List<StudentEntity> getAllStudents() {

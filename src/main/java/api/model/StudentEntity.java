@@ -3,6 +3,7 @@ package api.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "Student")
 public class StudentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
