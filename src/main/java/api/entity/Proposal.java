@@ -17,14 +17,16 @@ public class Proposal {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private COURSE course;
+    @Column(nullable = false)
+    private String studentNumber;     // proposal assigned to student X
 
     @ManyToOne
     @JoinColumn(name = "candidature_id")
     private Candidature candidature;
 
     @ManyToOne
-    @JoinColumn(name = "teacher_id")
-    private Teacher teacher;
+    @JoinColumn(name = "professor_id")
+    private Professor professor;
 
     public Proposal() {
     }
@@ -84,11 +86,19 @@ public class Proposal {
         this.candidature = candidature;
     }
 
-    public Teacher getTeacher() {
-        return teacher;
+    public Professor getProfessor() {
+        return professor;
     }
 
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
+    public void setProfessor(Professor professor) {
+        this.professor = professor;
+    }
+
+    public String getStudentNumber() {
+        return studentNumber;
+    }
+
+    public void setStudentNumber(String studentNumber) {
+        this.studentNumber = studentNumber;
     }
 }

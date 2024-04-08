@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-public class Teacher {
+public class Professor {
 
     @Id
     @GeneratedValue
@@ -15,13 +15,13 @@ public class Teacher {
     @Column(nullable = false)
     private String email;
 
-    @OneToMany(mappedBy = "teacher")
+    @OneToMany(mappedBy = "professor")
     private List<Proposal> proposals;
 
-    public Teacher() {
+    public Professor() {
     }
 
-    public Teacher(String name, String email, List<Proposal> proposals) {
+    public Professor(String name, String email, List<Proposal> proposals) {
         this.name = name;
         this.email = email;
         this.proposals = proposals;
