@@ -9,7 +9,7 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(nullable = false)
-    private long num;
+    private String num;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
@@ -26,7 +26,7 @@ public class Student {
     public Student() {
     }
 
-    public Student(long num, String name, String email, COURSE course, double classification) {
+    public Student(String num, String name, String email, COURSE course, double classification) {
         this.num = num;
         this.name = name;
         this.email = email;
@@ -42,11 +42,11 @@ public class Student {
         this.id = id;
     }
 
-    public long getNum() {
+    public String getNum() {
         return num;
     }
 
-    public void setNum(long num) {
+    public void setNum(String num) {
         this.num = num;
     }
 
