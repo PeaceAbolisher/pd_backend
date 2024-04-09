@@ -7,6 +7,7 @@ import api.util.COURSE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,5 +50,11 @@ public class ProposalService {
 
     public void deleteProposal(Long id) {
         proposalRepository.deleteById(id);
+    }
+
+    public boolean assign() {
+        List<Proposal> proposalsNotAssigned = proposalRepository.findAllByStudentNumberIsNull();
+
+        return false;
     }
 }

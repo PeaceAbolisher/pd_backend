@@ -64,4 +64,15 @@ public class ProposalRestController {
         proposalService.deleteProposal(id);
         return ResponseEntity.noContent().build();
     }
+
+    // assign students to proposals depending on the candidatures
+    @PostMapping("/assign")
+    public ResponseEntity<String> assign() {
+        boolean result = proposalService.assign();
+        if (result) {
+            return ResponseEntity.status(HttpStatus.OK).body("Proposals assigned.");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error assigning proposals.");
+        }
+    }
 }
