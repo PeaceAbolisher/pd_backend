@@ -14,7 +14,7 @@ import java.util.List;
 public class Candidature {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
@@ -24,11 +24,6 @@ public class Candidature {
     @OneToMany(mappedBy = "candidature", fetch = FetchType.EAGER)
     private List<Proposal> proposals;
 
-
-    public Candidature(Student student, List<Proposal> proposals) {
-        this.student = student;
-        this.proposals = proposals;
-    }
 
     public boolean addProposal(Proposal proposal) {
         return proposals.add(proposal);

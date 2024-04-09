@@ -2,7 +2,6 @@ package api.controller;
 
 import api.entity.Student;
 import api.service.StudentService;
-import api.util.COURSE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,35 +39,21 @@ public class StudentRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Student> createStudent(
-            @RequestParam("number") String num,
-            @RequestParam("name") String name,
-            @RequestParam("email") String email,
-            @RequestParam("course") COURSE course,
-            @RequestParam("classification") double classification
-    ) {
-        Student student = studentService.createStudent(num, name, email, course, classification);
+    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
+        Student s = studentService.createStudent(student);
 
-        if (student == null)
+        if (s == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(student);
+        return ResponseEntity.status(HttpStatus.CREATED).body(s);
     }
 
-
     @PutMapping("/{id}")
-    public ResponseEntity<Student> updateStudent(
-            @PathVariable Long id,
-            @RequestParam("number") String num,
-            @RequestParam("name") String name,
-            @RequestParam("email") String email,
-            @RequestParam("course") COURSE course,
-            @RequestParam("classification") double classification
-    ) {
-        Student student = studentService.updateStudent(id, num, name, email, course, classification);
+    public ResponseEntity<Student> updateStudent(@PathVariable Long id, @RequestBody Student student) {
+        Student s = studentService.updateStudent(id, student);
 
-        if (student != null) {
-            return ResponseEntity.ok(student);
+        if (s != null) {
+            return ResponseEntity.ok(s);
         } else {
             return ResponseEntity.notFound().build();
         }

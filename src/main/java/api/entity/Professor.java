@@ -13,21 +13,20 @@ import java.util.List;
 @NoArgsConstructor
 public class Professor {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
     private String name;
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String email;
 
     @OneToMany(mappedBy = "professor")
     private List<Proposal> proposals;
 
 
-    public Professor(String name, String email, List<Proposal> proposals) {
+    public Professor(String name, String email) {
         this.name = name;
         this.email = email;
-        this.proposals = proposals;
     }
 
     public boolean addProposal(Proposal proposal) {

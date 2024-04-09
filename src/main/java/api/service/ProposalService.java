@@ -28,20 +28,19 @@ public class ProposalService {
         return proposalOptional.orElse(null);
     }
 
-    public Proposal createProposal(String title, String description, String companyName, COURSE course) {
-        Proposal proposal = new Proposal(title, description, companyName, course);
+    public Proposal createProposal(Proposal proposal) {
         return proposalRepository.save(proposal);
     }
 
-    public Proposal updateProposal(Long id, String title, String description, String companyName, COURSE course, String studentNumber) {
+    public Proposal updateProposal(Long id, Proposal proposal) {
         Proposal p = proposalRepository.findById(id).orElse(null);
 
         if (p != null) {
-            p.setTitle(title);
-            p.setDescription(description);
-            p.setCompanyName(companyName);
-            p.setCourse(course);
-            p.setStudentNumber(studentNumber);
+            p.setTitle(proposal.getTitle());
+            p.setDescription(proposal.getDescription());
+            p.setCompanyName(proposal.getCompanyName());
+            p.setCourse(proposal.getCourse());
+            p.setStudentNumber(proposal.getStudentNumber());
             return proposalRepository.save(p);
         } else {
             return null;

@@ -2,8 +2,6 @@ package api.service;
 
 import api.entity.Student;
 import api.repository.StudentRepository;
-import api.util.COURSE;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +19,7 @@ public class StudentService {
     }
 
     public List<Student> getAllStudents() {
-        List<Student> all = studentRepository.findAll();
-//        log.info("getAllStudents {}", all);
-        return all;
+        return studentRepository.findAll();
     }
 
     public Student getStudentById(Long studentId) {
@@ -33,20 +29,19 @@ public class StudentService {
         return studentOptional.orElse(null);
     }
 
-    public Student createStudent(String num, String name, String email, COURSE course, double classification) {
-        Student s = new Student(num, name, email, course, classification);
-        return studentRepository.save(s);
+    public Student createStudent(Student student) {
+        return studentRepository.save(student);
     }
 
-    public Student updateStudent(Long id, String num, String name, String email, COURSE course, double classification) {
+    public Student updateStudent(Long id, Student student) {
         Student s = studentRepository.findById(id).orElse(null);
 
         if (s != null) {
-            s.setNum(num);
-            s.setName(name);
-            s.setEmail(email);
-            s.setCourse(course);
-            s.setClassification(classification);
+            s.setNum(student.getNum());
+            s.setName(student.getName());
+            s.setEmail(student.getEmail());
+            s.setCourse(student.getCourse());
+            s.setClassification(student.getClassification());
             return studentRepository.save(s);
         } else {
             return null;

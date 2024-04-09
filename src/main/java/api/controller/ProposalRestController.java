@@ -37,34 +37,21 @@ public class ProposalRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Proposal> createProposal(
-            @RequestParam("title") String title,
-            @RequestParam("description") String description,
-            @RequestParam("company") String companyName,
-            @RequestParam("course") COURSE course
-    ) {
-        Proposal proposal = proposalService.createProposal(title, description, companyName, course);
+    public ResponseEntity<Proposal> createProposal(@RequestBody Proposal proposal) {
+        Proposal p = proposalService.createProposal(proposal);
 
-        if (proposal == null)
+        if (p == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(proposal);
+        return ResponseEntity.status(HttpStatus.CREATED).body(p);
     }
 
-
     @PutMapping("/{id}")
-    public ResponseEntity<Proposal> updateStudent(
-            @PathVariable Long id,
-            @RequestParam("title") String title,
-            @RequestParam("description") String description,
-            @RequestParam("company") String companyName,
-            @RequestParam("course") COURSE course,
-            @RequestParam("studentNumber") String studentNumber
-    ) {
-        Proposal proposal = proposalService.updateProposal(id, title, description, companyName, course, studentNumber);
+    public ResponseEntity<Proposal> updateStudent(@PathVariable Long id, @RequestBody Proposal proposal) {
+        Proposal p = proposalService.updateProposal(id, proposal);
 
-        if (proposal != null) {
-            return ResponseEntity.ok(proposal);
+        if (p != null) {
+            return ResponseEntity.ok(p);
         } else {
             return ResponseEntity.notFound().build();
         }

@@ -8,10 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/")
 public class TestController {
-    // apenas para teste
     @GetMapping("")
     public ResponseEntity<String> home() {
-        String home = "home page i guess?";
+        String home = "home page i guess";
         return ResponseEntity.ok(home);
     }
 }
