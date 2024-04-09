@@ -9,6 +9,6 @@ WORKDIR /app
 
 # Copy the packaged JAR file into the container
 COPY . .
-RUN mvn clean install
+#RUN mvn package -DskipTests
 
 CMD mvn spring-boot:run

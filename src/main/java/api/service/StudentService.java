@@ -3,6 +3,7 @@ package api.service;
 import api.entity.Student;
 import api.repository.StudentRepository;
 import api.util.COURSE;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class StudentService {
     private final StudentRepository studentRepository;
 
@@ -17,14 +19,17 @@ public class StudentService {
     public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
 
-        // para teste
-        Student s = new Student();
-        s.setName("test student");
-        studentRepository.save(s);
+//        // para teste
+//        Student s = new Student();
+//        s.setName("test student");
+//        studentRepository.save(s);
     }
 
     public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+
+        List<Student> all = studentRepository.findAll();
+        log.info("getAllStudents {}", all);
+        return all;
     }
 
     public Student getStudentById(Long studentId) {
