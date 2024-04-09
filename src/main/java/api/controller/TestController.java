@@ -8,14 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/")
 public class TestController {
-
-    // apenas para teste
-    @GetMapping("/hello")
-    public ResponseEntity<String> hello() {
-        String hello = "Hello World from backend!";
-        return ResponseEntity.ok(hello);
-    }
-
     // apenas para teste
     @GetMapping("")
     public ResponseEntity<String> home() {

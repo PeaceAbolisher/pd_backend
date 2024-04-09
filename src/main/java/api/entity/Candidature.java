@@ -1,10 +1,16 @@
 package api.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Candidature {
 
     @Id
@@ -19,9 +25,6 @@ public class Candidature {
     private List<Proposal> proposals;
 
 
-    public Candidature() {
-    }
-
     public Candidature(Student student, List<Proposal> proposals) {
         this.student = student;
         this.proposals = proposals;
@@ -33,29 +36,5 @@ public class Candidature {
 
     public boolean removeProposal(Proposal proposal) {
         return proposals.remove(proposal);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-    }
-
-    public List<Proposal> getProposals() {
-        return proposals;
-    }
-
-    public void setProposals(List<Proposal> proposals) {
-        this.proposals = proposals;
     }
 }

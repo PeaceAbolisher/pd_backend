@@ -10,25 +10,19 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+//@Slf4j
 @Service
-@Slf4j
 public class StudentService {
     private final StudentRepository studentRepository;
 
     @Autowired
     public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
-
-//        // para teste
-//        Student s = new Student();
-//        s.setName("test student");
-//        studentRepository.save(s);
     }
 
     public List<Student> getAllStudents() {
-
         List<Student> all = studentRepository.findAll();
-        log.info("getAllStudents {}", all);
+//        log.info("getAllStudents {}", all);
         return all;
     }
 

@@ -1,14 +1,14 @@
-# Pull image Java 17
+# pull image Java 17
 FROM eclipse-temurin:17
 
-# Install Maven
+# install Maven
 RUN apt-get update && apt-get install -y maven
 
-# Set the working directory inside the container
+# set the working directory inside the container
 WORKDIR /app
 
-# Copy the packaged JAR file into the container
+# copy the content of the current directory into the work directory inside the container
 COPY . .
-#RUN mvn package -DskipTests
 
+# run the app
 CMD mvn spring-boot:run

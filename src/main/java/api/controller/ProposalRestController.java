@@ -1,12 +1,8 @@
 package api.controller;
 
 import api.entity.Proposal;
-import api.entity.Student;
 import api.service.ProposalService;
 import api.util.COURSE;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
