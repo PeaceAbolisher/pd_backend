@@ -23,7 +23,7 @@ public class Proposal {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private COURSE course;
-    @Column(nullable = false)
+
     private String studentNumber;     // proposal assigned to student X
 
     @ManyToOne
@@ -33,12 +33,4 @@ public class Proposal {
     @ManyToOne
     @JoinColumn(name = "professor_id")
     private Professor professor;
-
-
-    public Proposal(String title, String description, String companyName, COURSE course) {
-        this.title = title;
-        this.description = description;
-        this.companyName = companyName;
-        this.course = course;
-    }
 }
