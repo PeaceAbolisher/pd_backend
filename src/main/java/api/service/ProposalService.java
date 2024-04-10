@@ -1,5 +1,6 @@
 package api.service;
 
+import api.entity.Candidature;
 import api.entity.Proposal;
 import api.entity.Student;
 import api.repository.ProposalRepository;
@@ -14,10 +15,12 @@ import java.util.Optional;
 @Service
 public class ProposalService {
     private final ProposalRepository proposalRepository;
+    private CandidatureService candidatureService;
 
     @Autowired
-    public ProposalService(ProposalRepository proposalRepository) {
+    public ProposalService(ProposalRepository proposalRepository, CandidatureService candidatureService) {
         this.proposalRepository = proposalRepository;
+        this.candidatureService = candidatureService;
     }
 
     public List<Proposal> getAll() {
@@ -52,9 +55,37 @@ public class ProposalService {
         proposalRepository.deleteById(id);
     }
 
-    public boolean assign() {
-        List<Proposal> proposalsNotAssigned = proposalRepository.findAllByStudentNumberIsNull();
+//    public boolean assign() {
+//        List<Proposal> proposalsNotAssigned = proposalRepository.findAllByStudentNumberIsNull();
+//
+//        return false;
+//    }
 
-        return false;
+    //TODO: verificar se vem ordenado pela nota dos alunos
+    public boolean assign() {
+        List<Candidature> candidatures = candidatureService.getUnusedCandidatures();
+
+        for (Candidature candidature : candidatures) {
+            candidature.setUsedInAssignment(true);
+            List<Proposal> candidatureProposals = candidature.getProposals();
+            if (candidatureProposals != null && !candidatureProposals.isEmpty()) {
+                for (Proposal cp : candidatureProposals) {
+                    // check if the candidature proposal is unassigned
+                    if (cp.getStudentNumber() == null) {
+                        Student student = candidature.getStudent();
+                        if (student != null) {
+                            // assign student to proposal
+                            cp.setStudentNumber(student.getNum());
+                            // TODO: assign a professor
+                            proposalRepository.save(cp);
+                            // move to the next candidature after assigning
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return true; // Successfully assigned proposals to students
+
     }
 }

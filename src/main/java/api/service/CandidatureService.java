@@ -48,4 +48,8 @@ public class CandidatureService {
     public void deleteCandidature(Long id) {
         candidatureRepository.deleteById(id);
     }
+
+    public List<Candidature> getUnusedCandidatures() {
+        return candidatureRepository.findAllByUsedInAssignmentFalse();
+    }
 }
