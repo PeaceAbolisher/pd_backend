@@ -50,6 +50,10 @@ public class CandidatureService {
     }
 
     public List<Candidature> getUnusedCandidatures() {
-        return candidatureRepository.findAllByUsedInAssignmentFalse();
+        return candidatureRepository.findAllUnassignedCandidaturesOrderByStudentClassificationDesc();
+    }
+
+    public void save(Candidature candidature) {
+        candidatureRepository.save(candidature);
     }
 }

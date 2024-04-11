@@ -20,9 +20,10 @@ public class Candidature {
     private boolean usedInAssignment;
 
     @OneToOne
-    @JoinColumn(name = "student_id")
+    @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
+    @Column(nullable = false)
     @ManyToMany(mappedBy = "candidatures")
     private List<Proposal> proposals;
 }

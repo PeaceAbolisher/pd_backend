@@ -48,4 +48,12 @@ public class ProfessorService {
     public void deleteProfessor(Long id) {
         professorRepository.deleteById(id);
     }
+
+    public void save(Professor professor) {
+        professorRepository.save(professor);
+    }
+
+    public List<Professor> getProfessorsOrderByProposalsSize(){
+        return professorRepository.findAllOrderByProposalsSizeAsc();
+    }
 }

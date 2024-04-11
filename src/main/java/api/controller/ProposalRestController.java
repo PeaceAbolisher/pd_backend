@@ -68,9 +68,9 @@ public class ProposalRestController {
     // check for candidatures and assign students to proposals
     @PostMapping("/assign")
     public ResponseEntity<String> assign() {
-        boolean result = proposalService.assign();
-        if (result) {
-            return ResponseEntity.status(HttpStatus.OK).body("Proposals assigned to students.");
+        int result = proposalService.assign();
+        if (result >= 0) {
+            return ResponseEntity.status(HttpStatus.OK).body("Proposals assigned to " + result + " students.");
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error assigning proposals to students.");
         }

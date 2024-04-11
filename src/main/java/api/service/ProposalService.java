@@ -1,6 +1,7 @@
 package api.service;
 
 import api.entity.Candidature;
+import api.entity.Professor;
 import api.entity.Proposal;
 import api.entity.Student;
 import api.repository.ProposalRepository;
@@ -15,12 +16,14 @@ import java.util.Optional;
 @Service
 public class ProposalService {
     private final ProposalRepository proposalRepository;
-    private CandidatureService candidatureService;
+    private final ProfessorService professorService;
+    private final CandidatureService candidatureService;
 
     @Autowired
-    public ProposalService(ProposalRepository proposalRepository, CandidatureService candidatureService) {
+    public ProposalService(ProposalRepository proposalRepository, CandidatureService candidatureService, ProfessorService professorService) {
         this.proposalRepository = proposalRepository;
         this.candidatureService = candidatureService;
+        this.professorService = professorService;
     }
 
     public List<Proposal> getAll() {
@@ -55,16 +58,13 @@ public class ProposalService {
         proposalRepository.deleteById(id);
     }
 
-//    public boolean assign() {
-//        List<Proposal> proposalsNotAssigned = proposalRepository.findAllByStudentNumberIsNull();
-//
-//        return false;
-//    }
-
-    //TODO: verificar se vem ordenado pela nota dos alunos
-    public boolean assign() {
+    public int assign() {
+        int assigned = 0;
         List<Candidature> candidatures = candidatureService.getUnusedCandidatures();
+        List<Professor> professors = professorService.getProfessorsOrderByProposalsSize();
+        int i = 0;
 
+        // TODO: quando é que dá erro?
         for (Candidature candidature : candidatures) {
             candidature.setUsedInAssignment(true);
             List<Proposal> candidatureProposals = candidature.getProposals();
@@ -74,18 +74,35 @@ public class ProposalService {
                     if (cp.getStudentNumber() == null) {
                         Student student = candidature.getStudent();
                         if (student != null) {
-                            // assign student to proposal
-                            cp.setStudentNumber(student.getNum());
-                            // TODO: assign a professor
-                            proposalRepository.save(cp);
-                            // move to the next candidature after assigning
-                            break;
+                            if (student.getCourse() == cp.getCourse()) {
+                                // assign student and professor to proposal
+                                cp.setStudentNumber(student.getNum());
+
+                                Professor professor = professors.get(i);
+                                cp.setProfessor(professor);
+                                professor.addProposal(cp);
+
+                                // increment and reset index when it reaches the end of the list
+                                i = (i + 1) % professors.size();
+
+                                saveToDatabase(candidature, cp, professor);
+
+                                assigned++;
+                                // move to the next candidature
+                                break;
+                            }
                         }
                     }
                 }
             }
         }
-        return true; // Successfully assigned proposals to students
+        return assigned;
+    }
 
+    // save candidature, proposal and professor to database
+    private void saveToDatabase(Candidature candidature, Proposal cp, Professor professor) {
+        proposalRepository.save(cp);
+        professorService.save(professor);
+        candidatureService.save(candidature);
     }
 }
