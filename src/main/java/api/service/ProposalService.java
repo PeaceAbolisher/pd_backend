@@ -5,11 +5,9 @@ import api.entity.Professor;
 import api.entity.Proposal;
 import api.entity.Student;
 import api.repository.ProposalRepository;
-import api.util.COURSE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,13 +56,13 @@ public class ProposalService {
         proposalRepository.deleteById(id);
     }
 
+    // TODO: testar queries
     public int assign() {
         int assigned = 0;
         List<Candidature> candidatures = candidatureService.getUnusedCandidatures();
         List<Professor> professors = professorService.getProfessorsOrderByProposalsSize();
-        int i = 0;
+        int professorsIndex = 0;
 
-        // TODO: quando é que dá erro?
         for (Candidature candidature : candidatures) {
             candidature.setUsedInAssignment(true);
             List<Proposal> candidatureProposals = candidature.getProposals();
@@ -78,12 +76,12 @@ public class ProposalService {
                                 // assign student and professor to proposal
                                 cp.setStudentNumber(student.getNum());
 
-                                Professor professor = professors.get(i);
+                                Professor professor = professors.get(professorsIndex);
                                 cp.setProfessor(professor);
                                 professor.addProposal(cp);
 
                                 // increment and reset index when it reaches the end of the list
-                                i = (i + 1) % professors.size();
+                                professorsIndex = (professorsIndex + 1) % professors.size();
 
                                 saveToDatabase(candidature, cp, professor);
 
