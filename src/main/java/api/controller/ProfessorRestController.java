@@ -1,7 +1,7 @@
 package api.controller;
 
 import api.entity.Professor;
-import api.service.ProfessorService;
+import api.service.CompositeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,21 +13,21 @@ import java.util.List;
 @RestController
 @RequestMapping("/professors")
 public class ProfessorRestController {
-    private final ProfessorService professorService;
+    private final CompositeService compositeService;
 
     @Autowired
-    public ProfessorRestController(ProfessorService professorService) {
-        this.professorService = professorService;
+    public ProfessorRestController(CompositeService compositeService) {
+        this.compositeService = compositeService;
     }
 
     @GetMapping
     public List<Professor> getAll() {
-        return professorService.getAll();
+        return compositeService.getAllProfessors();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Professor> getStudentById(@PathVariable Long id) {
-        Professor professor = professorService.getProfessorById(id);
+        Professor professor = compositeService.getProfessorById(id);
 
         if (professor != null) {
             return ResponseEntity.ok(professor);
@@ -41,9 +41,10 @@ public class ProfessorRestController {
             @RequestParam String name,
             @RequestParam String email
     ) {
-        Professor p = professorService.createProfessor(name, email);
-        if (p == null)
+        Professor p = compositeService.createProfessor(name, email);
+        if (p == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(p);
     }
@@ -53,14 +54,15 @@ public class ProfessorRestController {
             @PathVariable Long id,
             @RequestParam String name,
             @RequestParam String email,
-            @RequestParam Long[] proposalsIds
+            @RequestParam List<Long> proposalsIds
             ) {
         try {
-            Professor p = professorService.updateProfessor(id, name, email, proposalsIds);
-            if (p != null)
+            Professor p = compositeService.updateProfessor(id, name, email, proposalsIds);
+            if (p != null) {
                 return ResponseEntity.ok(p);
-            else
+            } else {
                 return ResponseEntity.notFound().build();
+            }
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -68,7 +70,7 @@ public class ProfessorRestController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProfessor(@PathVariable Long id) {
-        professorService.deleteProfessor(id);
+        compositeService.deleteProfessor(id);
         return ResponseEntity.noContent().build();
     }
 }

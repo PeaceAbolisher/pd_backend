@@ -2,7 +2,6 @@ package api.controller;
 
 import api.entity.Proposal;
 import api.service.CompositeService;
-import api.service.ProposalService;
 import api.util.COURSE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,24 +15,21 @@ import java.util.List;
 @RestController
 @RequestMapping("/proposals")
 public class ProposalRestController {
-    private final ProposalService proposalService;
     private final CompositeService compositeService;
 
     @Autowired
-    public ProposalRestController(ProposalService proposalService, CompositeService compositeService) {
-        this.proposalService = proposalService;
+    public ProposalRestController(CompositeService compositeService) {
         this.compositeService = compositeService;
     }
 
     @GetMapping
     public List<Proposal> getAllProposals() {
-        return proposalService.getAll();
+        return compositeService.getAllProposals();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Proposal> getProposalById(@PathVariable Long id) {
-        Proposal proposal = proposalService.getProposalById(id);
-
+        Proposal proposal = compositeService.getProposalById(id);
         if (proposal != null) {
             return ResponseEntity.ok(proposal);
         } else {
@@ -48,9 +44,10 @@ public class ProposalRestController {
             @RequestParam String companyName,
             @RequestParam COURSE course
     ) {
-        Proposal p = proposalService.createProposal(title, description, companyName, course);
-        if (p == null)
+        Proposal p = compositeService.createProposal(title, description, companyName, course);
+        if (p == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(p);
     }
@@ -65,11 +62,12 @@ public class ProposalRestController {
             @RequestParam String studentNumber
     ) {
         try {
-            Proposal p = proposalService.updateProposal(id, title, description, companyName, course, studentNumber);
-            if (p != null)
+            Proposal p = compositeService.updateProposal(id, title, description, companyName, course, studentNumber);
+            if (p != null) {
                 return ResponseEntity.ok(p);
-            else
+            } else {
                 return ResponseEntity.notFound().build();
+            }
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -77,7 +75,7 @@ public class ProposalRestController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProposal(@PathVariable Long id) {
-        proposalService.deleteProposal(id);
+        compositeService.deleteProposal(id);
         return ResponseEntity.noContent().build();
     }
 

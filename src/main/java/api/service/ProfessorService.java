@@ -6,19 +6,16 @@ import api.repository.ProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ProfessorService {
     private final ProfessorRepository professorRepository;
-    private final ProposalService proposalService;
 
     @Autowired
-    public ProfessorService(ProfessorRepository professorRepository, ProposalService proposalService) {
+    public ProfessorService(ProfessorRepository professorRepository) {
         this.professorRepository = professorRepository;
-        this.proposalService = proposalService;
     }
 
 
@@ -36,23 +33,10 @@ public class ProfessorService {
         return professorRepository.save(professor);
     }
 
-    public Professor updateProfessor(Long id, String name, String email, Long[] proposalsIds) {
+    public Professor updateProfessor(Long id, String name, String email, List<Proposal> proposalList) {
         Professor p = getProfessorById(id);
         if (p == null) {
             return null;
-        }
-
-        if (name == null || email == null || proposalsIds == null) {
-            throw new RuntimeException("Parameters cannot be null.");
-        }
-
-        List<Proposal> proposalList = new ArrayList<>();
-        for (Long propId : proposalsIds) {
-            Proposal prop = proposalService.getProposalById(propId);
-            if (prop == null) {
-                throw new RuntimeException("Invalid proposal id " + propId);
-            }
-            proposalList.add(prop);
         }
 
         p.setName(name);

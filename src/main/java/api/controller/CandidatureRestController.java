@@ -1,7 +1,7 @@
 package api.controller;
 
 import api.entity.Candidature;
-import api.service.CandidatureService;
+import api.service.CompositeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,21 +14,21 @@ import java.util.List;
 @RestController
 @RequestMapping("/candidatures")
 public class CandidatureRestController {
-    private final CandidatureService candidatureService;
+    private final CompositeService compositeService;
 
     @Autowired
-    public CandidatureRestController(CandidatureService candidatureService) {
-        this.candidatureService = candidatureService;
+    public CandidatureRestController(CompositeService compositeService) {
+        this.compositeService = compositeService;
     }
 
     @GetMapping
     public List<Candidature> getAll() {
-        return candidatureService.getAll();
+        return compositeService.getAllCandidatures();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Candidature> getCandidatureById(@PathVariable Long id) {
-        Candidature candidature = candidatureService.getCandidatureById(id);
+        Candidature candidature = compositeService.getCandidatureById(id);
 
         if (candidature != null) {
             return ResponseEntity.ok(candidature);
@@ -42,10 +42,11 @@ public class CandidatureRestController {
             @RequestParam Long studentId,
             @RequestParam List<Long> proposalsIds
     ) {
-        Candidature c = candidatureService.createCandidature(studentId, proposalsIds);
+        Candidature c = compositeService.createCandidature(studentId, proposalsIds);
 
-        if (c == null)
+        if (c == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(c);
     }
@@ -56,14 +57,15 @@ public class CandidatureRestController {
             @PathVariable Long id,
             @RequestParam Boolean usedInAssignment,
             @RequestParam Long studentId,
-            @RequestParam Long[] proposalsIds
+            @RequestParam List<Long> proposalsIds
     ) {
         try {
-            Candidature c = candidatureService.updateCandidature(id, usedInAssignment, studentId, proposalsIds);
-            if (c != null)
+            Candidature c = compositeService.updateCandidature(id, usedInAssignment, studentId, proposalsIds);
+            if (c != null) {
                 return ResponseEntity.ok(c);
-            else
+            } else {
                 return ResponseEntity.notFound().build();
+            }
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -71,7 +73,7 @@ public class CandidatureRestController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCandidature(@PathVariable Long id) {
-        candidatureService.deleteCandidature(id);
+        compositeService.deleteCandidature(id);
         return ResponseEntity.noContent().build();
     }
 }

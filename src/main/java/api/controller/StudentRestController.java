@@ -1,7 +1,7 @@
 package api.controller;
 
 import api.entity.Student;
-import api.service.StudentService;
+import api.service.CompositeService;
 import api.util.COURSE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,22 +15,22 @@ import java.util.List;
 @RestController
 @RequestMapping("/students")
 public class StudentRestController {
-    private final StudentService studentService;
+    private final CompositeService compositeService;
 
     @Autowired
-    public StudentRestController(StudentService studentService) {
-        this.studentService = studentService;
+    public StudentRestController(CompositeService compositeService) {
+        this.compositeService = compositeService;
     }
 
 
     @GetMapping
     public List<Student> getAllStudents() {
-        return studentService.getAllStudents();
+        return compositeService.getAllStudents();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
-        Student student = studentService.getStudentById(id);
+        Student student = compositeService.getStudentById(id);
 
         if (student != null) {
             return ResponseEntity.ok(student);
@@ -47,9 +47,10 @@ public class StudentRestController {
             @RequestParam COURSE course,
             @RequestParam double classification
     ) {
-        Student s = studentService.createStudent(num, name, email, course, classification);
-        if (s == null)
+        Student s = compositeService.createStudent(num, name, email, course, classification);
+        if (s == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(s);
     }
@@ -64,11 +65,12 @@ public class StudentRestController {
             @RequestParam Double classification
     ) {
         try {
-            Student s = studentService.updateStudent(id, num, name, email, course, classification);
-            if (s != null)
+            Student s = compositeService.updateStudent(id, num, name, email, course, classification);
+            if (s != null) {
                 return ResponseEntity.ok(s);
-            else
+            } else {
                 return ResponseEntity.notFound().build();
+            }
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -76,7 +78,7 @@ public class StudentRestController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
-        studentService.deleteStudent(id);
+        compositeService.deleteStudent(id);
         return ResponseEntity.noContent().build();
     }
 }

@@ -7,21 +7,16 @@ import api.repository.CandidatureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class CandidatureService {
     private final CandidatureRepository candidatureRepository;
-    private final StudentService studentService;
-    private final ProposalService proposalService;
 
     @Autowired
-    public CandidatureService(CandidatureRepository candidatureRepository, StudentService studentService, ProposalService proposalService) {
+    public CandidatureService(CandidatureRepository candidatureRepository) {
         this.candidatureRepository = candidatureRepository;
-        this.studentService = studentService;
-        this.proposalService = proposalService;
     }
 
     public List<Candidature> getAll() {
@@ -33,15 +28,7 @@ public class CandidatureService {
         return candidatureOptional.orElse(null);
     }
 
-    public Candidature createCandidature(Long studentId, List<Long> proposalsIds) {
-        Student student = studentService.getStudentById(studentId);
-        List<Proposal> proposalList = new ArrayList<>(proposalsIds.size());
-
-        for (long propId : proposalsIds) {
-            Proposal p = proposalService.getProposalById(propId);
-            proposalList.add(p);
-        }
-
+    public Candidature createCandidature(Student student, List<Proposal> proposalList) {
         if (student == null || proposalList.isEmpty()) {
             return null;
         } else {
@@ -50,28 +37,10 @@ public class CandidatureService {
         }
     }
 
-    public Candidature updateCandidature(Long id, Boolean usedInAssignment, Long studentId, Long[] proposalsIds) {
+    public Candidature updateCandidature(Long id, Boolean usedInAssignment, Student student, List<Proposal> proposalList) {
         Candidature c = getCandidatureById(id);
         if (c == null) {
             return null;
-        }
-
-        if (usedInAssignment == null || studentId == null || proposalsIds == null) {
-            throw new RuntimeException("Parameters cannot be null.");
-        }
-
-        Student student = studentService.getStudentById(studentId);
-        if (student == null) {
-            throw new RuntimeException("Invalid student id " + studentId);
-        }
-
-        List<Proposal> proposalList = new ArrayList<>();
-        for (Long propId : proposalsIds) {
-            Proposal p = proposalService.getProposalById(propId);
-            if (p == null) {
-                throw new RuntimeException("Invalid proposal id " + propId);
-            }
-            proposalList.add(p);
         }
 
         c.setUsedInAssignment(usedInAssignment);
