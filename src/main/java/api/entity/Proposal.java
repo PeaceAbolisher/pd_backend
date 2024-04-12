@@ -39,4 +39,11 @@ public class Proposal {
     @ManyToOne
     @JoinColumn(name = "professor_id")
     private Professor professor;
+
+    public Proposal(String title, String description, String companyName, COURSE course) {
+        this.title = title;
+        this.description = description;
+        this.companyName = companyName;
+        this.course = course;
+    }
 }

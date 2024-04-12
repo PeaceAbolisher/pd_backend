@@ -32,13 +32,4 @@ public class Candidature {
         this.proposals = proposalList;
         usedInAssignment = false;
     }
-
-
-    public boolean addProposal(Proposal proposal) {
-        return proposals.add(proposal);
-    }
-
-    public boolean removeProposal(Proposal proposal) {
-        return proposals.remove(proposal);
-    }
 }

@@ -59,7 +59,6 @@ public class ProfessorService {
         p.setEmail(email);
         p.setProposals(proposalList);
         return professorRepository.save(p);
-
     }
 
     public void deleteProfessor(Long id) {

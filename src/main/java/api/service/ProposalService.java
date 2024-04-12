@@ -5,6 +5,7 @@ import api.entity.Professor;
 import api.entity.Proposal;
 import api.entity.Student;
 import api.repository.ProposalRepository;
+import api.util.COURSE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,23 +34,26 @@ public class ProposalService {
         return proposalOptional.orElse(null);
     }
 
-    public Proposal createProposal(Proposal proposal) {
+    public Proposal createProposal(String title, String description, String companyName, COURSE course) {
+        Proposal proposal = new Proposal(title, description, companyName, course);
         return proposalRepository.save(proposal);
     }
 
-    public Proposal updateProposal(Long id, Proposal proposal) {
-        Proposal p = proposalRepository.findById(id).orElse(null);
-
-        if (p != null) {
-            p.setTitle(proposal.getTitle());
-            p.setDescription(proposal.getDescription());
-            p.setCompanyName(proposal.getCompanyName());
-            p.setCourse(proposal.getCourse());
-            p.setStudentNumber(proposal.getStudentNumber());
-            return proposalRepository.save(p);
-        } else {
+    public Proposal updateProposal(Long id, String title, String description, String companyName, COURSE course, String studentNumber) {
+        Proposal p = getProposalById(id);
+        if (p == null) 
             return null;
+        
+        if (title == null || description == null || companyName == null || course == null || studentNumber == null) {
+            throw new RuntimeException("Parameters cannot be null.");
         }
+
+        p.setTitle(title);
+        p.setDescription(description);
+        p.setCompanyName(companyName);
+        p.setCourse(course);
+        p.setStudentNumber(studentNumber);
+        return proposalRepository.save(p);
     }
 
     public void deleteProposal(Long id) {
@@ -60,7 +64,7 @@ public class ProposalService {
     public int assign() {
         int assigned = 0;
         List<Candidature> candidatures = candidatureService.getUnusedCandidatures();
-        List<Professor> professors = professorService.getProfessorsOrderByProposalsSize();
+        List<Professor> professorList = professorService.getProfessorsOrderByProposalsSize();
         int professorsIndex = 0;
 
         for (Candidature candidature : candidatures) {
@@ -71,24 +75,22 @@ public class ProposalService {
                     // check if the candidature proposal is unassigned
                     if (cp.getStudentNumber() == null) {
                         Student student = candidature.getStudent();
-                        if (student != null) {
-                            if (student.getCourse() == cp.getCourse()) {
-                                // assign student and professor to proposal
-                                cp.setStudentNumber(student.getNum());
+                        if (student.getCourse() == cp.getCourse()) {
+                            // assign student and professor to proposal
+                            cp.setStudentNumber(student.getNum());
 
-                                Professor professor = professors.get(professorsIndex);
-                                cp.setProfessor(professor);
-                                professor.addProposal(cp);
+                            Professor professor = professorList.get(professorsIndex);
+                            cp.setProfessor(professor);
+                            professor.addProposal(cp);
 
-                                // increment and reset index when it reaches the end of the list
-                                professorsIndex = (professorsIndex + 1) % professors.size();
+                            // increment and reset index when it reaches the end of the list
+                            professorsIndex = (professorsIndex + 1) % professorList.size();
 
-                                saveToDatabase(candidature, cp, professor);
+                            saveToDatabase(candidature, cp, professor);
 
-                                assigned++;
-                                // move to the next candidature
-                                break;
-                            }
+                            assigned++;
+                            // move to the next candidature
+                            break;
                         }
                     }
                 }
@@ -103,4 +105,6 @@ public class ProposalService {
         professorService.save(professor);
         candidatureService.save(candidature);
     }
+
+    
 }

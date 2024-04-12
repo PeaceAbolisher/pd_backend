@@ -2,6 +2,7 @@ package api.controller;
 
 import api.entity.Proposal;
 import api.service.ProposalService;
+import api.util.COURSE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,9 +39,13 @@ public class ProposalRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Proposal> createProposal(@RequestBody Proposal proposal) {
-        Proposal p = proposalService.createProposal(proposal);
-
+    public ResponseEntity<Proposal> createProposal(
+            @RequestParam String title,
+            @RequestParam String description,
+            @RequestParam String companyName,
+            @RequestParam COURSE course
+    ) {
+        Proposal p = proposalService.createProposal(title, description, companyName, course);
         if (p == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
@@ -48,18 +53,27 @@ public class ProposalRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Proposal> updateStudent(@PathVariable Long id, @RequestBody Proposal proposal) {
-        Proposal p = proposalService.updateProposal(id, proposal);
-
-        if (p != null) {
-            return ResponseEntity.ok(p);
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> updateProposal(
+            @PathVariable Long id,
+            @RequestParam String title,
+            @RequestParam String description,
+            @RequestParam String companyName,
+            @RequestParam COURSE course,
+            @RequestParam String studentNumber
+    ) {
+        try {
+            Proposal p = proposalService.updateProposal(id, title, description, companyName, course, studentNumber);
+            if (p != null)
+                return ResponseEntity.ok(p);
+            else
+                return ResponseEntity.notFound().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteProposal(@PathVariable Long id) {
         proposalService.deleteProposal(id);
         return ResponseEntity.noContent().build();
     }
