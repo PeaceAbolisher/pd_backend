@@ -28,12 +28,7 @@ public class Proposal {
     @Column(nullable = true)
     private String studentNumber;     // proposal assigned to student X
 
-    @ManyToMany
-    @JoinTable(
-            name = "proposal_candidature",
-            joinColumns = @JoinColumn(name = "proposal_id"),
-            inverseJoinColumns = @JoinColumn(name = "candidature_id")
-    )
+    @ManyToMany(mappedBy = "proposals")
     private List<Candidature> candidatures;
 
     @ManyToOne

@@ -23,8 +23,14 @@ public class Candidature {
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
+
     @Column(nullable = false)
-    @ManyToMany(mappedBy = "candidatures")
+    @ManyToMany
+    @JoinTable(
+            name = "candidature_proposals",
+            joinColumns = @JoinColumn(name = "candidature_id"),
+            inverseJoinColumns = @JoinColumn(name = "proposal_id")
+    )
     private List<Proposal> proposals;
 
     public Candidature(Student student, List<Proposal> proposalList) {

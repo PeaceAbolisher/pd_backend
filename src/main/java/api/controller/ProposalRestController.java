@@ -1,6 +1,7 @@
 package api.controller;
 
 import api.entity.Proposal;
+import api.service.CompositeService;
 import api.service.ProposalService;
 import api.util.COURSE;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,12 @@ import java.util.List;
 @RequestMapping("/proposals")
 public class ProposalRestController {
     private final ProposalService proposalService;
+    private final CompositeService compositeService;
 
     @Autowired
-    public ProposalRestController(ProposalService proposalService) {
+    public ProposalRestController(ProposalService proposalService, CompositeService compositeService) {
         this.proposalService = proposalService;
+        this.compositeService = compositeService;
     }
 
     @GetMapping
@@ -81,7 +84,7 @@ public class ProposalRestController {
     // check for candidatures and assign students to proposals
     @PostMapping("/assign")
     public ResponseEntity<String> assign() {
-        int assigned = proposalService.assign();
+        int assigned = compositeService.assign();
         String response;
         if (assigned > 0) {
             response = "Assigned " + assigned + " proposals.";
