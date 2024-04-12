@@ -7,6 +7,7 @@ import api.entity.Student;
 import api.repository.ProposalRepository;
 import api.util.COURSE;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class ProposalService {
     private final CandidatureService candidatureService;
 
     @Autowired
-    public ProposalService(ProposalRepository proposalRepository, CandidatureService candidatureService, ProfessorService professorService) {
+    public ProposalService(ProposalRepository proposalRepository, @Lazy CandidatureService candidatureService, @Lazy ProfessorService professorService) {
         this.proposalRepository = proposalRepository;
         this.candidatureService = candidatureService;
         this.professorService = professorService;
