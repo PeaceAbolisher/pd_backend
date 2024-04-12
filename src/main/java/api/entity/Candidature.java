@@ -16,20 +16,14 @@ public class Candidature {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false, name = "used_in_assignment")
+    private boolean usedInAssignment;
 
     @OneToOne
-    @JoinColumn(name = "student_id")
+    @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
-    @OneToMany(mappedBy = "candidature", fetch = FetchType.EAGER)
+    @Column(nullable = false)
+    @ManyToMany(mappedBy = "candidatures")
     private List<Proposal> proposals;
-
-
-    public boolean addProposal(Proposal proposal) {
-        return proposals.add(proposal);
-    }
-
-    public boolean removeProposal(Proposal proposal) {
-        return proposals.remove(proposal);
-    }
 }

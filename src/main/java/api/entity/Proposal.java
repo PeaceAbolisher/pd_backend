@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -23,12 +25,16 @@ public class Proposal {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private COURSE course;
-
+    @Column(nullable = true)
     private String studentNumber;     // proposal assigned to student X
 
-    @ManyToOne
-    @JoinColumn(name = "candidature_id")
-    private Candidature candidature;
+    @ManyToMany
+    @JoinTable(
+            name = "proposal_candidature",
+            joinColumns = @JoinColumn(name = "proposal_id"),
+            inverseJoinColumns = @JoinColumn(name = "candidature_id")
+    )
+    private List<Candidature> candidatures;
 
     @ManyToOne
     @JoinColumn(name = "professor_id")

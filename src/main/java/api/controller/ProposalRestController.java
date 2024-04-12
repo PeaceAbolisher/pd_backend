@@ -2,7 +2,6 @@ package api.controller;
 
 import api.entity.Proposal;
 import api.service.ProposalService;
-import api.util.COURSE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,5 +62,18 @@ public class ProposalRestController {
     public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
         proposalService.deleteProposal(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // check for candidatures and assign students to proposals
+    @PostMapping("/assign")
+    public ResponseEntity<String> assign() {
+        int assigned = proposalService.assign();
+        String response;
+        if (assigned > 0) {
+            response = "Assigned " + assigned + " proposals.";
+        } else {
+            response = "No new assignments were made. All candidatures have already been used or all proposals are already assigned to a student.";
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
