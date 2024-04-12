@@ -26,4 +26,19 @@ public class Candidature {
     @Column(nullable = false)
     @ManyToMany(mappedBy = "candidatures")
     private List<Proposal> proposals;
+
+    public Candidature(Student student, List<Proposal> proposalList) {
+        this.student = student;
+        this.proposals = proposalList;
+        usedInAssignment = false;
+    }
+
+
+    public boolean addProposal(Proposal proposal) {
+        return proposals.add(proposal);
+    }
+
+    public boolean removeProposal(Proposal proposal) {
+        return proposals.remove(proposal);
+    }
 }

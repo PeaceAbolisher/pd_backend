@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.InvalidParameterException;
 import java.util.List;
 
 
@@ -39,8 +40,11 @@ public class CandidatureRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Candidature> createCandidature(@RequestBody Candidature candidature) {
-        Candidature c = candidatureService.createCandidature(candidature);
+    public ResponseEntity<Candidature> createCandidature(
+            @RequestBody Long studentId,
+            @RequestBody Long[] proposalsIds
+    ) {
+        Candidature c = candidatureService.createCandidature(studentId, proposalsIds);
 
         if (c == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -48,14 +52,22 @@ public class CandidatureRestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(c);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Candidature> updateCandidature(@PathVariable Long id, @RequestBody Candidature candidature) {
-        Candidature c = candidatureService.updateCandidature(id, candidature);
 
-        if (c != null) {
-            return ResponseEntity.ok(c);
-        } else {
-            return ResponseEntity.notFound().build();
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateCandidature(
+            @PathVariable Long id,
+            @RequestBody Boolean usedInAssignment,
+            @RequestBody Long studentId,
+            @RequestBody Long[] proposalsIds
+    ) {
+        try {
+            Candidature c = candidatureService.updateCandidature(id, usedInAssignment, studentId, proposalsIds);
+            if (c != null)
+                return ResponseEntity.ok(c);
+            else
+                return ResponseEntity.notFound().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
