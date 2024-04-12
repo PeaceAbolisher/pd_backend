@@ -37,9 +37,11 @@ public class ProfessorRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Professor> createProfessor(@RequestBody Professor professor) {
-        Professor p = professorService.createProfessor(professor);
-
+    public ResponseEntity<Professor> createProfessor(
+            @RequestParam String name,
+            @RequestParam String email
+    ) {
+        Professor p = professorService.createProfessor(name, email);
         if (p == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
@@ -47,13 +49,20 @@ public class ProfessorRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Professor> updateProfessor(@PathVariable Long id, @RequestBody Professor professor) {
-        Professor p = professorService.updateProfessor(id, professor);
-
-        if (p != null) {
-            return ResponseEntity.ok(p);
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> updateProfessor(
+            @PathVariable Long id,
+            @RequestParam String name,
+            @RequestParam String email,
+            @RequestParam Long[] proposalsIds
+            ) {
+        try {
+            Professor p = professorService.updateProfessor(id, name, email, proposalsIds);
+            if (p != null)
+                return ResponseEntity.ok(p);
+            else
+                return ResponseEntity.notFound().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

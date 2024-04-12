@@ -1,14 +1,12 @@
 package api.controller;
 
 import api.entity.Candidature;
-import api.entity.Professor;
 import api.service.CandidatureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.InvalidParameterException;
 import java.util.List;
 
 
@@ -41,8 +39,8 @@ public class CandidatureRestController {
 
     @PostMapping
     public ResponseEntity<Candidature> createCandidature(
-            @RequestBody Long studentId,
-            @RequestBody Long[] proposalsIds
+            @RequestParam Long studentId,
+            @RequestParam Long[] proposalsIds
     ) {
         Candidature c = candidatureService.createCandidature(studentId, proposalsIds);
 
@@ -56,9 +54,9 @@ public class CandidatureRestController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCandidature(
             @PathVariable Long id,
-            @RequestBody Boolean usedInAssignment,
-            @RequestBody Long studentId,
-            @RequestBody Long[] proposalsIds
+            @RequestParam Boolean usedInAssignment,
+            @RequestParam Long studentId,
+            @RequestParam Long[] proposalsIds
     ) {
         try {
             Candidature c = candidatureService.updateCandidature(id, usedInAssignment, studentId, proposalsIds);
