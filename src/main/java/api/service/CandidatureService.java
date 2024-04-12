@@ -33,9 +33,9 @@ public class CandidatureService {
         return candidatureOptional.orElse(null);
     }
 
-    public Candidature createCandidature(Long studentId, Long[] proposalsIds) {
+    public Candidature createCandidature(Long studentId, List<Long> proposalsIds) {
         Student student = studentService.getStudentById(studentId);
-        List<Proposal> proposalList = new ArrayList<>(proposalsIds.length);
+        List<Proposal> proposalList = new ArrayList<>(proposalsIds.size());
 
         for (long propId : proposalsIds) {
             Proposal p = proposalService.getProposalById(propId);

@@ -40,7 +40,7 @@ public class CandidatureRestController {
     @PostMapping
     public ResponseEntity<Candidature> createCandidature(
             @RequestParam Long studentId,
-            @RequestParam Long[] proposalsIds
+            @RequestParam List<Long> proposalsIds
     ) {
         Candidature c = candidatureService.createCandidature(studentId, proposalsIds);
 
