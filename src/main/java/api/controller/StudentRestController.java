@@ -2,6 +2,7 @@ package api.controller;
 
 import api.entity.Student;
 import api.service.StudentService;
+import api.util.COURSE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,9 +40,14 @@ public class StudentRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
-        Student s = studentService.createStudent(student);
-
+    public ResponseEntity<Student> createStudent(
+            @RequestParam String num,
+            @RequestParam String name,
+            @RequestParam String email,
+            @RequestParam COURSE course,
+            @RequestParam double classification
+    ) {
+        Student s = studentService.createStudent(num, name, email, course, classification);
         if (s == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
@@ -49,13 +55,22 @@ public class StudentRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Student> updateStudent(@PathVariable Long id, @RequestBody Student student) {
-        Student s = studentService.updateStudent(id, student);
-
-        if (s != null) {
-            return ResponseEntity.ok(s);
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> updateStudent(
+            @PathVariable Long id,
+            @RequestParam String num,
+            @RequestParam String name,
+            @RequestParam String email,
+            @RequestParam COURSE course,
+            @RequestParam Double classification
+    ) {
+        try {
+            Student s = studentService.updateStudent(id, num, name, email, course, classification);
+            if (s != null)
+                return ResponseEntity.ok(s);
+            else
+                return ResponseEntity.notFound().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
