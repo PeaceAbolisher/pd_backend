@@ -31,7 +31,8 @@ public class Proposal {
     @ManyToMany(mappedBy = "proposals")
     private List<Candidature> candidatures;
 
-    @ManyToOne
+    // owner
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "professor_id")
     private Professor professor;
 

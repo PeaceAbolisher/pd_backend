@@ -23,7 +23,7 @@ public class Candidature {
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
-
+    // owner
     @Column(nullable = false)
     @ManyToMany
     @JoinTable(

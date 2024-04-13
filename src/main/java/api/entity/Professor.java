@@ -29,11 +29,11 @@ public class Professor {
         this.email = email;
     }
 
-    public boolean addProposal(Proposal proposal) {
-        return proposals.add(proposal);
+    public void addProposal(Proposal proposal) {
+        proposals.add(proposal);
     }
 
-    public boolean removeProposal(Proposal proposal) {
-        return proposals.remove(proposal);
+    public void removeProposal(Proposal proposal) {
+        proposals.remove(proposal);
     }
 }
