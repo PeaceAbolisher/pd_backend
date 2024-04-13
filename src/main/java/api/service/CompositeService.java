@@ -7,7 +7,6 @@ import api.entity.Student;
 import api.util.COURSE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -30,6 +29,7 @@ public class CompositeService {
 
 
     // TODO: testar queries
+    @Transactional
     public int assign() {
         List<Candidature> candidatures = candidatureService.getUnusedCandidatures();
         List<Professor> professorList = professorService.getProfessorsOrderByProposalsSize();
@@ -70,8 +70,7 @@ public class CompositeService {
 
 
     // save candidature, proposal and professor to database
-    @Transactional(propagation = Propagation.REQUIRED)
-    void saveToDatabase(Candidature candidature, Proposal cp, Professor professor) {
+    private void saveToDatabase(Candidature candidature, Proposal cp, Professor professor) {
         proposalService.save(cp);
         professorService.save(professor);
         candidatureService.save(candidature);
