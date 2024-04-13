@@ -68,7 +68,6 @@ public class CompositeService {
         return assigned;
     }
 
-
     // save candidature, proposal and professor to database
     private void saveToDatabase(Candidature candidature, Proposal cp, Professor professor) {
         proposalService.save(cp);
@@ -88,6 +87,7 @@ public class CompositeService {
         }
         return proposalList;
     }
+
 
     // -------------- PROPOSAL -------------- //
     public List<Proposal> getAllProposals() {
@@ -148,6 +148,7 @@ public class CompositeService {
         candidatureService.deleteCandidature(id);
     }
 
+
     // -------------- PROFESSOR -------------- //
     public List<Professor> getAllProfessors() {
         return professorService.getAll();
@@ -173,6 +174,7 @@ public class CompositeService {
     public void deleteProfessor(Long id) {
         professorService.deleteProfessor(id);
     }
+
 
     // -------------- STUDENT -------------- //
     public List<Student> getAllStudents() {
