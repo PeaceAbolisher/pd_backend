@@ -5,7 +5,7 @@ FROM eclipse-temurin:17
 RUN apt-get update && apt-get install -y maven
 
 # set the working directory inside the container
-WORKDIR /app
+WORKDIR /backend
 
 # copy the content of the current directory into the work directory inside the container
 COPY . .
